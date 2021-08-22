@@ -8,7 +8,10 @@ isa_dictF = {"hlt": "10011"}
 head_dict = {"A": isa_dictA, "B": isa_dictB, "C": isa_dictC, "D": isa_dictD, "E": isa_dictE, "F": isa_dictF}
 cmd = ["add", "sub", "mov", "mov", "ld", "st", "mul", "div", "rs", "ls", "xor", "or", "and", "not", "cmp", "jmp", "jlt","jgt", "je", "hlt"]
 
+isdict={"00000":"A","00001":"A", "00110":"A", "01010":"A", "01011":"A", "01100":"A","00010":"B", "01000":"B", "01001":"B","00011":"C", "00111":"C", "01101":"C", "01110":"C","00100":"D", "00101":"D","01111":"E", "10000":"E", "10001":"E", "10010":"E","10011":"F"}
 allins=[]
+
+
 
 while True:
     try:
@@ -29,7 +32,67 @@ while True:
     except EOFError:
         break
 
+
+
+    ndic={}
+    ldic={}
+    nc=0
+    for i in (allins):
+        if 'var' in i:
+            
+            nc=nc+1
+    
+
+    memad=len(allins)-nc-1
+    memadd=memad+1
+
+    for i in (allins):
+        if 'var' in i:
+            ii=i.split(" ")
+            try:
+            
+                ndic[ii[1]]=memadd+1
+                memadd=memadd+1
+            except:
+                continue
+
+   
+    # for j in (allins):
+    #     if ':' in j:
+    #         jj=j.split(" ")
+    #         try:
+            
+    #             ndic[jj[0]]=memadd+1
+    #             memadd=memadd+1
+    #         except:
+    #             continue
+
+
+
+
+
+
+
+
+
+
+
+
+
+counter=-1
+for j in allins:
+    counter=counter+1
+    if ':' in j:
+        jj=j.split(" ")
+        try:
+            
+            ldic[jj[0]]=counter-nc
+                
+        except:
+            continue
+
 check=False
+
 for i in allins:
     if "hlt" in i:
         check=True
@@ -38,18 +101,15 @@ for i in allins:
 
 
 
-def fw(lcount):
-    for i in range(0,len(lcount)):
-        lcount[i]+=1
-lcount=[]
-lcount.append(2)
 
 
-linecount = 1
+
+       
 
 count=0
 
 finalans=[]
+
 
 while (count<=len(allins)-1):
 
@@ -68,10 +128,15 @@ while (count<=len(allins)-1):
 
 
 
-
+    
     arr = userinput.split(" ")
+    # print(arr)
     if ":" in str(arr[0]):
+        # poper.append(arr[0])
         arr.pop(0)
+        # print(poper)
+        # print(arr)
+        
 
     arr1 = []
     if "var" in str(arr):
@@ -156,8 +221,11 @@ while (count<=len(allins)-1):
                         if (arr[i] == key):
                             arr1.append(value)
 
-
-                a = lcount[0]+1
+                # print(arr[2])
+                
+                for key in ndic:
+                    if key==arr[2]:
+                        a=ndic[key]
                 c = bin(int(a))[2:]
                 z = c.zfill(8)
                 arr1.append(z)
@@ -175,7 +243,7 @@ while (count<=len(allins)-1):
 
         if(arr[0]=='var'):
            
-            lcount.append(2)
+            continue
         
 
         for key, value in isa_dictE.items():
@@ -183,24 +251,33 @@ while (count<=len(allins)-1):
                 arr1.append(value)
 
         arr1.append("000")
-        
-        a = arr[1]
-        c = bin(int(linecount))[2:]
-        z = c.zfill(8)
-        arr1.append(z)
-        ans = ""
-        for ele in arr1:
-            ans += ele
+        try:
+            for k in ldic:
+                if arr[1]==k[0:len(k)-1]:
+                
+                
+                    
+                    a=ldic[k]
+            
+            c = bin(int(a))[2:]
+            z = c.zfill(8)
+            arr1.append(z)
+            ans = ""
+            for ele in arr1:
+                ans += ele
         # print(ans)
-        finalans.append(ans)
+            finalans.append(ans)
+        
+        except:
+            print("General Synatx Error")
 
-    map(fw,lcount)
-    linecount += 1
+    # map(fw,lcount)
+    # linecount += 1
 
     # print(count)
 
     if arr[len(arr)-1] == "hlt":
-        
+        # print(linecount)
         r="1001100000000000"
         finalans.append(r)
 
